@@ -1,25 +1,20 @@
 ﻿using eTickets.Data.Cart;
 using eTickets.Data.Services;
-using eTickets.Data.Static;
 using eTickets.Data.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace eTickets.Controllers
 {
-    [Authorize] 
+    [Authorize]
     public class OrdersController : Controller
     {
-        private readonly IMoviesService _moviesService;
+        private readonly IMovieService _moviesService;
         private readonly ShoppingCart _shoppingCart;
         private readonly IOrdersService _ordersService;
 
-        public OrdersController(IMoviesService moviesService, ShoppingCart shoppingCart, IOrdersService ordersService)
+        public OrdersController(IMovieService moviesService, ShoppingCart shoppingCart, IOrdersService ordersService)
         {
             _moviesService = moviesService;
             _shoppingCart = shoppingCart;

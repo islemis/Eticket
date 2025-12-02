@@ -1,16 +1,21 @@
-﻿using eTickets.Data.Base;
-using eTickets.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Ticket.Data;
+using Ticket.Models;
 
 namespace eTickets.Data.Services
 {
-    public class CinemasService:EntityBaseRepository<Cinema>, ICinemasService
+    public class CinemaService
     {
-        public CinemasService(AppDbContext context) : base(context)
+        private readonly AppDbContext _context;
+
+        public CinemaService(AppDbContext context)
         {
+            _context = context;
+        }
+
+        public async Task<List<Cinema>> GetAll()
+        {
+            return await _context.Cinemas.ToListAsync();
         }
     }
 }

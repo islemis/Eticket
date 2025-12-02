@@ -1,138 +1,116 @@
-﻿using eTickets.Data;
-using eTickets.Data.Services;
-using eTickets.Data.Static;
-using eTickets.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using eTickets.Data.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Ticket.Models;
 
 namespace eTickets.Controllers
 {
-    [Authorize(Roles = UserRoles.Admin)]
-    public class MoviesController : Controller
+    public class MovieController : Controller
     {
-        private readonly IMoviesService _service;
+        private readonly MovieService _movieService;
+        private readonly ProducerService _producerService;
+        private readonly CinemaService _cinemaService;
+        private readonly ActorService _actorService;
 
-        public MoviesController(IMoviesService service)
+        public MovieController(MovieService movieService,
+                               ProducerService producerService,
+                               CinemaService cinemaService,
+                               ActorService actorService)
         {
-            _service = service;
+            _movieService = movieService;
+            _producerService = producerService;
+            _cinemaService = cinemaService;
+            _actorService = actorService;
         }
 
-        [AllowAnonymous]
+        // GET: Movie
         public async Task<IActionResult> Index()
         {
-            var allMovies = await _service.GetAllAsync(n => n.Cinema);
-            return View(allMovies);
+            var movies = await _movieService.GetAll();
+            return View(movies);
         }
 
-        [AllowAnonymous]
-        public async Task<IActionResult> Filter(string searchString)
-        {
-            var allMovies = await _service.GetAllAsync(n => n.Cinema);
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                //var filteredResult = allMovies.Where(n => n.Name.ToLower().Contains(searchString.ToLower()) || n.Description.ToLower().Contains(searchString.ToLower())).ToList();
-
-                var filteredResultNew = allMovies.Where(n => string.Equals(n.Name, searchString, StringComparison.CurrentCultureIgnoreCase) || string.Equals(n.Description, searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
-
-                return View("Index", filteredResultNew);
-            }
-
-            return View("Index", allMovies);
-        }
-
-        //GET: Movies/Details/1
-        [AllowAnonymous]
-        public async Task<IActionResult> Details(int id)
-        {
-            var movieDetail = await _service.GetMovieByIdAsync(id);
-            return View(movieDetail);
-        }
-
-        //GET: Movies/Create
+        // GET: Movie/Create
         public async Task<IActionResult> Create()
         {
-            var movieDropdownsData = await _service.GetNewMovieDropdownsValues();
-
-            ViewBag.Cinemas = new SelectList(movieDropdownsData.Cinemas, "Id", "Name");
-            ViewBag.Producers = new SelectList(movieDropdownsData.Producers, "Id", "FullName");
-            ViewBag.Actors = new SelectList(movieDropdownsData.Actors, "Id", "FullName");
-
+            ViewBag.Producers = new SelectList(await _producerService.GetAll(), "Id", "Name");
+            ViewBag.Cinemas = new SelectList(await _cinemaService.GetAll(), "Id", "Name");
+            ViewBag.Actors = new MultiSelectList(await _actorService.GetAll(), "Id", "Name");
             return View();
         }
 
+        // POST: Movie/Create
         [HttpPost]
-        public async Task<IActionResult> Create(NewMovieVM movie)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Movie movie, int[] SelectedActorIds)
         {
             if (!ModelState.IsValid)
             {
-                var movieDropdownsData = await _service.GetNewMovieDropdownsValues();
-
-                ViewBag.Cinemas = new SelectList(movieDropdownsData.Cinemas, "Id", "Name");
-                ViewBag.Producers = new SelectList(movieDropdownsData.Producers, "Id", "FullName");
-                ViewBag.Actors = new SelectList(movieDropdownsData.Actors, "Id", "FullName");
-
+                ViewBag.Producers = new SelectList(await _producerService.GetAll(), "Id", "Name");
+                ViewBag.Cinemas = new SelectList(await _cinemaService.GetAll(), "Id", "Name");
+                ViewBag.Actors = new MultiSelectList(await _actorService.GetAll(), "Id", "Name");
                 return View(movie);
             }
 
-            await _service.AddNewMovieAsync(movie);
+            await _movieService.Add(movie, SelectedActorIds);
             return RedirectToAction(nameof(Index));
         }
 
-
-        //GET: Movies/Edit/1
+        // GET: Movie/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var movieDetails = await _service.GetMovieByIdAsync(id);
-            if (movieDetails == null) return View("NotFound");
+            var movie = await _movieService.GetById(id);
+            if (movie == null) return NotFound();
 
-            var response = new NewMovieVM()
-            {
-                Id = movieDetails.Id,
-                Name = movieDetails.Name,
-                Description = movieDetails.Description,
-                Price = movieDetails.Price,
-                StartDate = movieDetails.StartDate,
-                EndDate = movieDetails.EndDate,
-                ImageURL = movieDetails.ImageURL,
-                MovieCategory = movieDetails.MovieCategory,
-                CinemaId = movieDetails.CinemaId,
-                ProducerId = movieDetails.ProducerId,
-                ActorIds = movieDetails.Actors_Movies.Select(n => n.ActorId).ToList(),
-            };
-
-            var movieDropdownsData = await _service.GetNewMovieDropdownsValues();
-            ViewBag.Cinemas = new SelectList(movieDropdownsData.Cinemas, "Id", "Name");
-            ViewBag.Producers = new SelectList(movieDropdownsData.Producers, "Id", "FullName");
-            ViewBag.Actors = new SelectList(movieDropdownsData.Actors, "Id", "FullName");
-
-            return View(response);
+            ViewBag.Producers = new SelectList(await _producerService.GetAll(), "Id", "Name", movie.ProducerId);
+            ViewBag.Cinemas = new SelectList(await _cinemaService.GetAll(), "Id", "Name", movie.CinemaId);
+            ViewBag.Actors = new MultiSelectList(await _actorService.GetAll(),
+                                                 "Id", "Name",
+                                                 movie.Actors_Movies?.Select(am => am.ActorId));
+            return View(movie);
         }
 
+        // POST: Movie/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, NewMovieVM movie)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Movie movie, int[] SelectedActorIds)
         {
-            if (id != movie.Id) return View("NotFound");
-
+            if (id != movie.Id) return NotFound();
             if (!ModelState.IsValid)
             {
-                var movieDropdownsData = await _service.GetNewMovieDropdownsValues();
-
-                ViewBag.Cinemas = new SelectList(movieDropdownsData.Cinemas, "Id", "Name");
-                ViewBag.Producers = new SelectList(movieDropdownsData.Producers, "Id", "FullName");
-                ViewBag.Actors = new SelectList(movieDropdownsData.Actors, "Id", "FullName");
-
+                ViewBag.Producers = new SelectList(await _producerService.GetAll(), "Id", "Name", movie.ProducerId);
+                ViewBag.Cinemas = new SelectList(await _cinemaService.GetAll(), "Id", "Name", movie.CinemaId);
+                ViewBag.Actors = new MultiSelectList(await _actorService.GetAll(), "Id", "Name", SelectedActorIds);
                 return View(movie);
             }
 
-            await _service.UpdateMovieAsync(movie);
+            await _movieService.Update(movie, SelectedActorIds);
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Movie/Delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            var movie = await _movieService.GetById(id);
+            if (movie == null) return NotFound();
+            return View(movie);
+        }
+
+        // POST: Movie/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _movieService.Delete(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Movie/Details/5
+        public async Task<IActionResult> Details(int id)
+        {
+            var movie = await _movieService.GetById(id);
+            if (movie == null) return NotFound();
+            return View(movie);
         }
     }
 }

@@ -1,8 +1,6 @@
-using System.Diagnostics;
-using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Ticket.Controllers
+namespace eTickets.Controllers
 {
     public class HomeController : Controller
     {
@@ -11,15 +9,9 @@ namespace Ticket.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult About()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

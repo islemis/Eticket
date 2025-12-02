@@ -1,16 +1,21 @@
-﻿using eTickets.Data.Base;
-using eTickets.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Ticket.Data;
+using Ticket.Models;
 
 namespace eTickets.Data.Services
 {
-    public class ProducersService: EntityBaseRepository<Producer>, IProducersService
+    public class ProducerService
     {
-        public ProducersService(AppDbContext context) : base(context)
+        private readonly AppDbContext _context;
+
+        public ProducerService(AppDbContext context)
         {
+            _context = context;
+        }
+
+        public async Task<List<Producer>> GetAll()
+        {
+            return await _context.Producers.ToListAsync();
         }
     }
 }

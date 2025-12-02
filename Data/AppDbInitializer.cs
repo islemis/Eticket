@@ -1,12 +1,6 @@
 ﻿using eTickets.Data.Static;
 using eTickets.Models;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eTickets.Data
 {
@@ -339,7 +333,7 @@ namespace eTickets.Data
                 string adminUserEmail = "admin@etickets.com";
 
                 var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
-                if(adminUser == null)
+                if (adminUser == null)
                 {
                     var newAdminUser = new ApplicationUser()
                     {

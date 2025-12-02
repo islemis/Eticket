@@ -5,6 +5,8 @@ using eTickets.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Ticket.Data;
+using Ticket.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +16,17 @@ var configuration = builder.Configuration;
 
 // DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=ETickets;Trusted_Connection=True;MultipleActiveResultSets=true"));
+    options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=ECTickets;Trusted_Connection=True;MultipleActiveResultSets=true"));
 
 // Services
-builder.Services.AddScoped<IActorsService, ActorsService>();
-builder.Services.AddScoped<IProducersService, ProducersService>();
-builder.Services.AddScoped<ICinemasService, CinemasService>();
-builder.Services.AddScoped<IMoviesService, MoviesService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IScreeningService, ScreeningService>();
+builder.Services.AddScoped<ITicketMService, TicketMService>();
+builder.Services.AddScoped<ActorService>();
+builder.Services.AddScoped<CinemaService>();
+builder.Services.AddScoped<ProducerService>();
+
+
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

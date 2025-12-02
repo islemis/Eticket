@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace eTickets.Models
+namespace Ticket.Models
 {
     public class ShoppingCartItem
     {
-        [Key]
         public int Id { get; set; }
 
-        public Movie Movie { get; set; }
-        public int Amount { get; set; }
+        [Required]
+        public int TicketId { get; set; }
 
+        [ForeignKey("TicketId")]
+        public TicketM Ticket { get; set; }
 
+        [Required]
+        [Display(Name = "ID du panier")]
         public string ShoppingCartId { get; set; }
     }
 }

@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace eTickets.Models
+namespace Ticket.Models
 {
     public class Order
     {
-        [Key]
         public int Id { get; set; }
 
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email client")]
         public string Email { get; set; }
 
+        [Display(Name = "Utilisateur")]
         public string UserId { get; set; }
-        [ForeignKey(nameof(UserId))]
-        public ApplicationUser User { get; set; }
 
-        public List<OrderItem> OrderItems { get; set; }
+        [Required]
+        [Display(Name = "Date de commande")]
+        public DateTime OrderDate { get; set; }
+
+        public List<OrderItem> Items { get; set; }
     }
 }
