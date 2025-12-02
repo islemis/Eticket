@@ -1,6 +1,6 @@
 using System.Diagnostics;
+using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
-using Ticket.Models;
 
 namespace Ticket.Controllers
 {
