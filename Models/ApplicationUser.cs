@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace eTickets.Models
+namespace Ticket.Models
 {
     public class ApplicationUser : IdentityUser
     {

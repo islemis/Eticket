@@ -1,4 +1,6 @@
-﻿namespace eTickets.Data.ViewModels
+﻿using Ticket.Models;
+
+namespace Ticket.Data.ViewModels
 {
     public class NewMovieDropdownsVM
     {

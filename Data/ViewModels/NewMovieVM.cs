@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace eTickets.Models
+namespace Ticket.Models
 {
     public class NewMovieVM
     {
@@ -30,9 +30,6 @@ namespace eTickets.Models
         [Required(ErrorMessage = "End date is required")]
         public DateTime EndDate { get; set; }
 
-        [Display(Name = "Select a category")]
-        [Required(ErrorMessage = "Movie category is required")]
-        public MovieCategory MovieCategory { get; set; }
 
         //Relationships
         [Display(Name = "Select actor(s)")]

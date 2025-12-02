@@ -1,9 +1,8 @@
-﻿using eTickets.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Ticket.Data;
 using Ticket.Models;
 
-namespace eTickets.Data.Services
+namespace Ticket.Data.Services
 {
     public class MovieService : IMovieService
     {

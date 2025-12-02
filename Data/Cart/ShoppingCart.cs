@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+/*
 namespace eTickets.Data.Cart
 {
     public class ShoppingCart
@@ -80,3 +80,4 @@ namespace eTickets.Data.Cart
         }
     }
 }
+*/

@@ -7,10 +7,10 @@ namespace eTickets.Controllers
 {
     public class TicketMController : Controller
     {
-        private readonly TicketMService _ticketService;
-        private readonly ScreeningService _screeningService;
+        private readonly ITicketMService _ticketService;
+        private readonly IScreeningService _screeningService;
 
-        public TicketMController(TicketMService ticketService, ScreeningService screeningService)
+        public TicketMController(ITicketMService ticketService, IScreeningService screeningService)
         {
             _ticketService = ticketService;
             _screeningService = screeningService;

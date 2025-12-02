@@ -58,11 +58,13 @@ namespace Ticket.Data.Services
                 await _context.SaveChangesAsync();
             }
         }
-        public async Task<TicketM> GetTicketBySeat(int screeningId, int seatNumber)
-        {
-            return await _context.TicketMs
-                                 .FirstOrDefaultAsync(t => t.ScreeningId == screeningId && t.SeatNumber == seatNumber);
-        }
 
+        public async Task<TicketM> GetTicketBySeat(int ScreeningId, int SeatNumber)
+        
+            {
+                return await _context.TicketMs
+                                     .FirstOrDefaultAsync(t => t.ScreeningId == ScreeningId && t.SeatNumber == SeatNumber);
+            }
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿@inject UserManager<ApplicationUser> UserManager; 
+﻿@using Ticket.Models
+@inject UserManager<ApplicationUser> UserManager; 
 
 @if (!User.Identity.IsAuthenticated)
 {

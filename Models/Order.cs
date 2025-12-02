@@ -18,6 +18,7 @@ namespace Ticket.Models
         [Display(Name = "Date de commande")]
         public DateTime OrderDate { get; set; }
 
-        public List<OrderItem> Items { get; set; }
+        // Initialisation pour éviter null
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

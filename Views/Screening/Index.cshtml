@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Ticket.Models.Screening>
+
+@{
+    ViewData["Title"] = "Liste des séances";
+}
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 col-xs-6 mb-3">
+            <div class="card shadow">
+                <!-- Image du film -->
+                <img src="@item.Movie?.ImageURL" class="card-img-top" style="height: 300px; object-fit: cover;" />
+
+                <div class="card-body">
+                    <h5 class="card-title">@item.Movie?.Title</h5>
+                    <p>
+                        <b>Date et heure :</b> @item.StartTime.ToString("dd/MM/yyyy HH:mm")
+                    </p>
+                    <p><b>Prix :</b> @item.Price Dt</p>
+                    <p><b>Producteur :</b> @item.Movie?.Producer?.Name</p>
+                </div>
+
+                <div class="card-footer text-end">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Détails</a>
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Modifier</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Supprimer</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

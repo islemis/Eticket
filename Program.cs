@@ -1,12 +1,10 @@
-using eTickets.Data;
-using eTickets.Data.Cart;
-using eTickets.Data.Services;
-using eTickets.Models;
+
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Ticket.Data;
 using Ticket.Data.Services;
+using Ticket.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +28,7 @@ builder.Services.AddScoped<ProducerService>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddScoped(sc => ShoppingCart.GetShoppingCart(sc));
+//builder.Services.AddScoped(sc => ShoppingCart.GetShoppingCart(sc));
 
 // Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -83,7 +81,7 @@ app.UseAuthorization();
 // Endpoint routing
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Movies}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // Seed database
 AppDbInitializer.Seed(app);

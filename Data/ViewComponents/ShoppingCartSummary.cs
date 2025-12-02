@@ -1,4 +1,4 @@
-﻿using eTickets.Data.Cart;
+﻿/*using eTickets.Data.Cart;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eTickets.Data.ViewComponents
@@ -19,3 +19,4 @@ namespace eTickets.Data.ViewComponents
         }
     }
 }
+*/

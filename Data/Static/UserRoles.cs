@@ -1,4 +1,4 @@
-﻿namespace eTickets.Data.Static
+﻿namespace Ticket.Data.Static
 {
     public static class UserRoles
     {

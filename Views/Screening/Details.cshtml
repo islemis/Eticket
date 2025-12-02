@@ -1,0 +1,70 @@
+﻿@model Ticket.Models.Screening
+
+@{
+    ViewData["Title"] = "Détails de la séance";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h4>@Model.Movie?.Title – @Model.StartTime.ToString("dd/MM/yyyy HH:mm")</h4>
+            </div>
+
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="@Model.Movie?.ImageURL" class="img-fluid" alt="@Model.Movie?.Title" />
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <p><b>Description :</b> @Model.Movie?.Description</p>
+                        <p><b>Durée :</b> @Model.Movie?.DurationMinutes minutes</p>
+                        <p><b>Producteur :</b> @Model.Movie?.Producer?.Name</p>
+
+                        <p>
+                            <b>Acteurs :</b>
+                            <hr />
+                            <div class="row">
+                                @if (Model.Movie?.Actors_Movies != null && Model.Movie.Actors_Movies.Any())
+                                {
+                                    @foreach (var actorMovie in Model.Movie.Actors_Movies)
+                                    {
+                                        <div class="col-md-4 text-center mb-3">
+                                            <a asp-controller="Actors" asp-action="Details" asp-route-id="@actorMovie.ActorId">
+                                                @actorMovie.Actor.Name
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <span>Pas d'acteurs</span>
+                                }
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <a asp-action="Index" class="btn btn-outline-primary">Retour à la liste</a>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-primary">Retour à la liste</a>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Reservation" asp-action="Create" asp-route-screeningId="@Model.Id" class="btn btn-success">
+                        Réserver ce ticket
+                    </a>
+                }
+                else
+                {
+                    <span class="text-danger">Connectez-vous pour réserver</span>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

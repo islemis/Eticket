@@ -1,8 +1,8 @@
-﻿using eTickets.Data.Static;
-using eTickets.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Ticket.Data.Static;
+using Ticket.Models;
 
-namespace eTickets.Data
+namespace Ticket.Data
 {
     public class AppDbInitializer
     {
@@ -14,304 +14,400 @@ namespace eTickets.Data
 
                 context.Database.EnsureCreated();
 
-                //Cinema
-                if (!context.Cinemas.Any())
-                {
-                    context.Cinemas.AddRange(new List<Cinema>()
-                    {
-                        new Cinema()
-                        {
-                            Name = "Cinema 1",
-                            Logo = "http://dotnethow.net/images/cinemas/cinema-1.jpeg",
-                            Description = "This is the description of the first cinema"
-                        },
-                        new Cinema()
-                        {
-                            Name = "Cinema 2",
-                            Logo = "http://dotnethow.net/images/cinemas/cinema-2.jpeg",
-                            Description = "This is the description of the first cinema"
-                        },
-                        new Cinema()
-                        {
-                            Name = "Cinema 3",
-                            Logo = "http://dotnethow.net/images/cinemas/cinema-3.jpeg",
-                            Description = "This is the description of the first cinema"
-                        },
-                        new Cinema()
-                        {
-                            Name = "Cinema 4",
-                            Logo = "http://dotnethow.net/images/cinemas/cinema-4.jpeg",
-                            Description = "This is the description of the first cinema"
-                        },
-                        new Cinema()
-                        {
-                            Name = "Cinema 5",
-                            Logo = "http://dotnethow.net/images/cinemas/cinema-5.jpeg",
-                            Description = "This is the description of the first cinema"
-                        },
-                    });
-                    context.SaveChanges();
-                }
-                //Actors
-                if (!context.Actors.Any())
-                {
-                    context.Actors.AddRange(new List<Actor>()
-                    {
-                        new Actor()
-                        {
-                            FullName = "Actor 1",
-                            Bio = "This is the Bio of the first actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/actors/actor-1.jpeg"
-
-                        },
-                        new Actor()
-                        {
-                            FullName = "Actor 2",
-                            Bio = "This is the Bio of the second actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/actors/actor-2.jpeg"
-                        },
-                        new Actor()
-                        {
-                            FullName = "Actor 3",
-                            Bio = "This is the Bio of the second actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/actors/actor-3.jpeg"
-                        },
-                        new Actor()
-                        {
-                            FullName = "Actor 4",
-                            Bio = "This is the Bio of the second actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/actors/actor-4.jpeg"
-                        },
-                        new Actor()
-                        {
-                            FullName = "Actor 5",
-                            Bio = "This is the Bio of the second actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/actors/actor-5.jpeg"
-                        }
-                    });
-                    context.SaveChanges();
-                }
-                //Producers
+                // 1️⃣ Producers
                 if (!context.Producers.Any())
                 {
-                    context.Producers.AddRange(new List<Producer>()
-                    {
-                        new Producer()
-                        {
-                            FullName = "Producer 1",
-                            Bio = "This is the Bio of the first actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/producers/producer-1.jpeg"
-
-                        },
-                        new Producer()
-                        {
-                            FullName = "Producer 2",
-                            Bio = "This is the Bio of the second actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/producers/producer-2.jpeg"
-                        },
-                        new Producer()
-                        {
-                            FullName = "Producer 3",
-                            Bio = "This is the Bio of the second actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/producers/producer-3.jpeg"
-                        },
-                        new Producer()
-                        {
-                            FullName = "Producer 4",
-                            Bio = "This is the Bio of the second actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/producers/producer-4.jpeg"
-                        },
-                        new Producer()
-                        {
-                            FullName = "Producer 5",
-                            Bio = "This is the Bio of the second actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/producers/producer-5.jpeg"
-                        }
-                    });
+                    var producers = new List<Producer>
+                {
+                    new Producer { Name = "Christopher Nolan" },
+                    new Producer { Name = "Steven Spielberg" }
+                };
+                    context.Producers.AddRange(producers);
                     context.SaveChanges();
                 }
-                //Movies
+
+                // 2️⃣ Actors
+                if (!context.Actors.Any())
+                {
+                    var actors = new List<Actor>
+                {
+                    new Actor { Name = "Leonardo DiCaprio" },
+                    new Actor { Name = "Joseph Gordon-Levitt" },
+                    new Actor { Name = "Matthew McConaughey" }
+                };
+                    context.Actors.AddRange(actors);
+                    context.SaveChanges();
+                }
+
+                // 3️⃣ Movies
                 if (!context.Movies.Any())
                 {
-                    context.Movies.AddRange(new List<Movie>()
+                    var movies = new List<Movie>
+                {
+                    new Movie
                     {
-                        new Movie()
-                        {
-                            Name = "Life",
-                            Description = "This is the Life movie description",
-                            Price = 39.50,
-                            ImageURL = "http://dotnethow.net/images/movies/movie-3.jpeg",
-                            StartDate = DateTime.Now.AddDays(-10),
-                            EndDate = DateTime.Now.AddDays(10),
-                            CinemaId = 3,
-                            ProducerId = 3,
-                            MovieCategory = MovieCategory.Documentary
-                        },
-                        new Movie()
-                        {
-                            Name = "The Shawshank Redemption",
-                            Description = "This is the Shawshank Redemption description",
-                            Price = 29.50,
-                            ImageURL = "http://dotnethow.net/images/movies/movie-1.jpeg",
-                            StartDate = DateTime.Now,
-                            EndDate = DateTime.Now.AddDays(3),
-                            CinemaId = 1,
-                            ProducerId = 1,
-                            MovieCategory = MovieCategory.Action
-                        },
-                        new Movie()
-                        {
-                            Name = "Ghost",
-                            Description = "This is the Ghost movie description",
-                            Price = 39.50,
-                            ImageURL = "http://dotnethow.net/images/movies/movie-4.jpeg",
-                            StartDate = DateTime.Now,
-                            EndDate = DateTime.Now.AddDays(7),
-                            CinemaId = 4,
-                            ProducerId = 4,
-                            MovieCategory = MovieCategory.Horror
-                        },
-                        new Movie()
-                        {
-                            Name = "Race",
-                            Description = "This is the Race movie description",
-                            Price = 39.50,
-                            ImageURL = "http://dotnethow.net/images/movies/movie-6.jpeg",
-                            StartDate = DateTime.Now.AddDays(-10),
-                            EndDate = DateTime.Now.AddDays(-5),
-                            CinemaId = 1,
-                            ProducerId = 2,
-                            MovieCategory = MovieCategory.Documentary
-                        },
-                        new Movie()
-                        {
-                            Name = "Scoob",
-                            Description = "This is the Scoob movie description",
-                            Price = 39.50,
-                            ImageURL = "http://dotnethow.net/images/movies/movie-7.jpeg",
-                            StartDate = DateTime.Now.AddDays(-10),
-                            EndDate = DateTime.Now.AddDays(-2),
-                            CinemaId = 1,
-                            ProducerId = 3,
-                            MovieCategory = MovieCategory.Cartoon
-                        },
-                        new Movie()
-                        {
-                            Name = "Cold Soles",
-                            Description = "This is the Cold Soles movie description",
-                            Price = 39.50,
-                            ImageURL = "http://dotnethow.net/images/movies/movie-8.jpeg",
-                            StartDate = DateTime.Now.AddDays(3),
-                            EndDate = DateTime.Now.AddDays(20),
-                            CinemaId = 1,
-                            ProducerId = 5,
-                            MovieCategory = MovieCategory.Drama
-                        }
-                    });
+                        Title = "Inception",
+                        Description = "Un film de science-fiction sur les rêves partagés.",
+                        DurationMinutes = 148,
+                        ImageURL = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.primevideo.com%2F-%2Ffr%2Fdetail%2FInception%2F0FFJSDLK6HUWC5T8XJUQODMFJ3&psig=AOvVaw139qoOXNAL-RA19otFEvCH&ust=1764786468356000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIij34bEn5EDFQAAAAAdAAAAABAE",
+                        ProducerId = context.Producers.First().Id
+                    },
+                    new Movie
+                    {
+                        Title = "Interstellar",
+                        Description = "Voyage dans l'espace pour sauver l'humanité.",
+                        DurationMinutes = 169,
+                        ImageURL = "https://example.com/interstellar.jpg",
+                        ProducerId = context.Producers.First().Id
+                    },
+                       new Movie
+                    {
+                        Title = "Inception",
+                        Description = "Un film de science-fiction sur les rêves partagés.",
+                        DurationMinutes = 148,
+                        ImageURL = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.primevideo.com%2F-%2Ffr%2Fdetail%2FInception%2F0FFJSDLK6HUWC5T8XJUQODMFJ3&psig=AOvVaw139qoOXNAL-RA19otFEvCH&ust=1764786468356000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIij34bEn5EDFQAAAAAdAAAAABAE",
+                        ProducerId = context.Producers.First().Id
+                    },
+                };
+                    context.Movies.AddRange(movies);
                     context.SaveChanges();
                 }
-                //Actors & Movies
+
+                // 4️⃣ Relations Actor_Movie
                 if (!context.Actors_Movies.Any())
                 {
-                    context.Actors_Movies.AddRange(new List<Actor_Movie>()
-                    {
-                        new Actor_Movie()
-                        {
-                            ActorId = 1,
-                            MovieId = 1
-                        },
-                        new Actor_Movie()
-                        {
-                            ActorId = 3,
-                            MovieId = 1
-                        },
+                    var inception = context.Movies.First(m => m.Title == "Inception");
+                    var interstellar = context.Movies.First(m => m.Title == "Interstellar");
 
-                         new Actor_Movie()
-                        {
-                            ActorId = 1,
-                            MovieId = 2
-                        },
-                         new Actor_Movie()
-                        {
-                            ActorId = 4,
-                            MovieId = 2
-                        },
+                    var leo = context.Actors.First(a => a.Name == "Leonardo DiCaprio");
+                    var joseph = context.Actors.First(a => a.Name == "Joseph Gordon-Levitt");
+                    var matthew = context.Actors.First(a => a.Name == "Matthew McConaughey");
 
-                        new Actor_Movie()
-                        {
-                            ActorId = 1,
-                            MovieId = 3
-                        },
-                        new Actor_Movie()
-                        {
-                            ActorId = 2,
-                            MovieId = 3
-                        },
-                        new Actor_Movie()
-                        {
-                            ActorId = 5,
-                            MovieId = 3
-                        },
-
-
-                        new Actor_Movie()
-                        {
-                            ActorId = 2,
-                            MovieId = 4
-                        },
-                        new Actor_Movie()
-                        {
-                            ActorId = 3,
-                            MovieId = 4
-                        },
-                        new Actor_Movie()
-                        {
-                            ActorId = 4,
-                            MovieId = 4
-                        },
-
-
-                        new Actor_Movie()
-                        {
-                            ActorId = 2,
-                            MovieId = 5
-                        },
-                        new Actor_Movie()
-                        {
-                            ActorId = 3,
-                            MovieId = 5
-                        },
-                        new Actor_Movie()
-                        {
-                            ActorId = 4,
-                            MovieId = 5
-                        },
-                        new Actor_Movie()
-                        {
-                            ActorId = 5,
-                            MovieId = 5
-                        },
-
-
-                        new Actor_Movie()
-                        {
-                            ActorId = 3,
-                            MovieId = 6
-                        },
-                        new Actor_Movie()
-                        {
-                            ActorId = 4,
-                            MovieId = 6
-                        },
-                        new Actor_Movie()
-                        {
-                            ActorId = 5,
-                            MovieId = 6
-                        },
-                    });
+                    context.Actors_Movies.AddRange(new List<Actor_Movie>
+                {
+                    new Actor_Movie { MovieId = inception.Id, ActorId = leo.Id },
+                    new Actor_Movie { MovieId = inception.Id, ActorId = joseph.Id },
+                    new Actor_Movie { MovieId = interstellar.Id, ActorId = matthew.Id }
+                });
                     context.SaveChanges();
                 }
-            }
+
+                // 5️⃣ Screenings
+                if (!context.Screenings.Any())
+                {
+                    var inceptionId = context.Movies.First(m => m.Title == "Inception").Id;
+                    var interstellarId = context.Movies.First(m => m.Title == "Interstellar").Id;
+
+                    var screenings = new List<Screening>
+                {
+                    new Screening { MovieId = inceptionId, StartTime = DateTime.Now.AddHours(2), Price = 10 },
+                    new Screening { MovieId = inceptionId, StartTime = DateTime.Now.AddHours(5), Price = 12 },
+                    new Screening { MovieId = interstellarId, StartTime = DateTime.Now.AddHours(3), Price = 15 }
+                };
+                    context.Screenings.AddRange(screenings);
+                    context.SaveChanges();
+                }
+            
+            /*
+                            //Cinema
+                            if (!context.Cinemas.Any())
+                            {
+                                context.Cinemas.AddRange(new List<Cinema>()
+                                {
+                                    new Cinema()
+                                    {
+                                        Name = "Cinema 1",
+                                        Logo = "http://dotnethow.net/images/cinemas/cinema-1.jpeg",
+                                        Description = "This is the description of the first cinema"
+                                    },
+                                    new Cinema()
+                                    {
+                                        Name = "Cinema 2",
+                                        Logo = "http://dotnethow.net/images/cinemas/cinema-2.jpeg",
+                                        Description = "This is the description of the first cinema"
+                                    },
+                                    new Cinema()
+                                    {
+                                        Name = "Cinema 3",
+                                        Logo = "http://dotnethow.net/images/cinemas/cinema-3.jpeg",
+                                        Description = "This is the description of the first cinema"
+                                    },
+                                    new Cinema()
+                                    {
+                                        Name = "Cinema 4",
+                                        Logo = "http://dotnethow.net/images/cinemas/cinema-4.jpeg",
+                                        Description = "This is the description of the first cinema"
+                                    },
+                                    new Cinema()
+                                    {
+                                        Name = "Cinema 5",
+                                        Logo = "http://dotnethow.net/images/cinemas/cinema-5.jpeg",
+                                        Description = "This is the description of the first cinema"
+                                    },
+                                });
+                                context.SaveChanges();
+                            }
+                            //Actors
+                            if (!context.Actors.Any())
+                            {
+                                context.Actors.AddRange(new List<Actor>()
+                                {
+                                    new Actor()
+                                    {
+                                        FullName = "Actor 1",
+                                        Bio = "This is the Bio of the first actor",
+                                        ProfilePictureURL = "http://dotnethow.net/images/actors/actor-1.jpeg"
+
+                                    },
+                                    new Actor()
+                                    {
+                                        FullName = "Actor 2",
+                                        Bio = "This is the Bio of the second actor",
+                                        ProfilePictureURL = "http://dotnethow.net/images/actors/actor-2.jpeg"
+                                    },
+                                    new Actor()
+                                    {
+                                        FullName = "Actor 3",
+                                        Bio = "This is the Bio of the second actor",
+                                        ProfilePictureURL = "http://dotnethow.net/images/actors/actor-3.jpeg"
+                                    },
+                                    new Actor()
+                                    {
+                                        FullName = "Actor 4",
+                                        Bio = "This is the Bio of the second actor",
+                                        ProfilePictureURL = "http://dotnethow.net/images/actors/actor-4.jpeg"
+                                    },
+                                    new Actor()
+                                    {
+                                        FullName = "Actor 5",
+                                        Bio = "This is the Bio of the second actor",
+                                        ProfilePictureURL = "http://dotnethow.net/images/actors/actor-5.jpeg"
+                                    }
+                                });
+                                context.SaveChanges();
+                            }
+                            //Producers
+                            if (!context.Producers.Any())
+                            {
+                                context.Producers.AddRange(new List<Producer>()
+                                {
+                                    new Producer()
+                                    {
+                                        FullName = "Producer 1",
+                                        Bio = "This is the Bio of the first actor",
+                                        ProfilePictureURL = "http://dotnethow.net/images/producers/producer-1.jpeg"
+
+                                    },
+                                    new Producer()
+                                    {
+                                        FullName = "Producer 2",
+                                        Bio = "This is the Bio of the second actor",
+                                        ProfilePictureURL = "http://dotnethow.net/images/producers/producer-2.jpeg"
+                                    },
+                                    new Producer()
+                                    {
+                                        FullName = "Producer 3",
+                                        Bio = "This is the Bio of the second actor",
+                                        ProfilePictureURL = "http://dotnethow.net/images/producers/producer-3.jpeg"
+                                    },
+                                    new Producer()
+                                    {
+                                        FullName = "Producer 4",
+                                        Bio = "This is the Bio of the second actor",
+                                        ProfilePictureURL = "http://dotnethow.net/images/producers/producer-4.jpeg"
+                                    },
+                                    new Producer()
+                                    {
+                                        FullName = "Producer 5",
+                                        Bio = "This is the Bio of the second actor",
+                                        ProfilePictureURL = "http://dotnethow.net/images/producers/producer-5.jpeg"
+                                    }
+                                });
+                                context.SaveChanges();
+                            }
+                            //Movies
+                            if (!context.Movies.Any())
+                            {
+                                context.Movies.AddRange(new List<Movie>()
+                                {
+                                    new Movie()
+                                    {
+                                        Name = "Life",
+                                        Description = "This is the Life movie description",
+                                        Price = 39.50,
+                                        ImageURL = "http://dotnethow.net/images/movies/movie-3.jpeg",
+                                        StartDate = DateTime.Now.AddDays(-10),
+                                        EndDate = DateTime.Now.AddDays(10),
+                                        CinemaId = 3,
+                                        ProducerId = 3,
+                                        MovieCategory = MovieCategory.Documentary
+                                    },
+                                    new Movie()
+                                    {
+                                        Name = "The Shawshank Redemption",
+                                        Description = "This is the Shawshank Redemption description",
+                                        Price = 29.50,
+                                        ImageURL = "http://dotnethow.net/images/movies/movie-1.jpeg",
+                                        StartDate = DateTime.Now,
+                                        EndDate = DateTime.Now.AddDays(3),
+                                        CinemaId = 1,
+                                        ProducerId = 1,
+                                        MovieCategory = MovieCategory.Action
+                                    },
+                                    new Movie()
+                                    {
+                                        Name = "Ghost",
+                                        Description = "This is the Ghost movie description",
+                                        Price = 39.50,
+                                        ImageURL = "http://dotnethow.net/images/movies/movie-4.jpeg",
+                                        StartDate = DateTime.Now,
+                                        EndDate = DateTime.Now.AddDays(7),
+                                        CinemaId = 4,
+                                        ProducerId = 4,
+                                        MovieCategory = MovieCategory.Horror
+                                    },
+                                    new Movie()
+                                    {
+                                        Name = "Race",
+                                        Description = "This is the Race movie description",
+                                        Price = 39.50,
+                                        ImageURL = "http://dotnethow.net/images/movies/movie-6.jpeg",
+                                        StartDate = DateTime.Now.AddDays(-10),
+                                        EndDate = DateTime.Now.AddDays(-5),
+                                        CinemaId = 1,
+                                        ProducerId = 2,
+                                        MovieCategory = MovieCategory.Documentary
+                                    },
+                                    new Movie()
+                                    {
+                                        Name = "Scoob",
+                                        Description = "This is the Scoob movie description",
+                                        Price = 39.50,
+                                        ImageURL = "http://dotnethow.net/images/movies/movie-7.jpeg",
+                                        StartDate = DateTime.Now.AddDays(-10),
+                                        EndDate = DateTime.Now.AddDays(-2),
+                                        CinemaId = 1,
+                                        ProducerId = 3,
+                                        MovieCategory = MovieCategory.Cartoon
+                                    },
+                                    new Movie()
+                                    {
+                                        Name = "Cold Soles",
+                                        Description = "This is the Cold Soles movie description",
+                                        Price = 39.50,
+                                        ImageURL = "http://dotnethow.net/images/movies/movie-8.jpeg",
+                                        StartDate = DateTime.Now.AddDays(3),
+                                        EndDate = DateTime.Now.AddDays(20),
+                                        CinemaId = 1,
+                                        ProducerId = 5,
+                                        MovieCategory = MovieCategory.Drama
+                                    }
+                                });
+                                context.SaveChanges();
+                            }
+                            //Actors & Movies
+                            if (!context.Actors_Movies.Any())
+                            {
+                                context.Actors_Movies.AddRange(new List<Actor_Movie>()
+                                {
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 1,
+                                        MovieId = 1
+                                    },
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 3,
+                                        MovieId = 1
+                                    },
+
+                                     new Actor_Movie()
+                                    {
+                                        ActorId = 1,
+                                        MovieId = 2
+                                    },
+                                     new Actor_Movie()
+                                    {
+                                        ActorId = 4,
+                                        MovieId = 2
+                                    },
+
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 1,
+                                        MovieId = 3
+                                    },
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 2,
+                                        MovieId = 3
+                                    },
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 5,
+                                        MovieId = 3
+                                    },
+
+
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 2,
+                                        MovieId = 4
+                                    },
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 3,
+                                        MovieId = 4
+                                    },
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 4,
+                                        MovieId = 4
+                                    },
+
+
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 2,
+                                        MovieId = 5
+                                    },
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 3,
+                                        MovieId = 5
+                                    },
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 4,
+                                        MovieId = 5
+                                    },
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 5,
+                                        MovieId = 5
+                                    },
+
+
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 3,
+                                        MovieId = 6
+                                    },
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 4,
+                                        MovieId = 6
+                                    },
+                                    new Actor_Movie()
+                                    {
+                                        ActorId = 5,
+                                        MovieId = 6
+                                    },
+                                });
+                                context.SaveChanges();
+                            }
+                            */
+        }
 
         }
 

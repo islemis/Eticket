@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Ticket.Data;
+using Ticket.Data.Services;
+using Ticket.Models;
 
-namespace eTickets.Data.Services
+namespace Ticket.Data.Services
 {
     public class OrdersService : IOrdersService
     {
@@ -12,7 +15,7 @@ namespace eTickets.Data.Services
 
         public async Task<List<Order>> GetOrdersByUserIdAndRoleAsync(string userId, string userRole)
         {
-            var orders = await _context.Orders.Include(n => n.OrderItems).ThenInclude(n => n.Movie).Include(n => n.User).ToListAsync();
+            var orders = await _context.Orders.Include(n => n.OrderItems).Include(n => n.UserId).ToListAsync();
 
             if (userRole != "Admin")
             {
@@ -36,10 +39,7 @@ namespace eTickets.Data.Services
             {
                 var orderItem = new OrderItem()
                 {
-                    Amount = item.Amount,
-                    MovieId = item.Movie.Id,
                     OrderId = order.Id,
-                    Price = item.Movie.Price
                 };
                 await _context.OrderItems.AddAsync(orderItem);
             }

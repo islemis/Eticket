@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Ticket.Data.Services;
 using Ticket.Models;
 
-namespace eTickets.Controllers
+namespace Ticket.Controllers
 {
     public class ScreeningController : Controller
     {
-        private readonly ScreeningService _screeningService;
-        private readonly Data.Services.MovieService _movieService;
+        private readonly IScreeningService _screeningService;
+        private readonly IMovieService _movieService;
 
-        public ScreeningController(ScreeningService screeningService, Data.Services.MovieService movieService)
+        public ScreeningController(IScreeningService screeningService, IMovieService movieService)
         {
             _screeningService = screeningService;
             _movieService = movieService;

@@ -1,0 +1,27 @@
+﻿@model Ticket.Models.Screening
+
+@{
+    ViewData["Title"] = "Supprimer séance";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-3">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h4>Supprimer la séance</h4>
+            </div>
+            <div class="card-body">
+                <p>
+                    Êtes-vous sûr de vouloir supprimer la séance du film
+                    <strong>@Model.Movie?.Title</strong> le <strong>@Model.StartTime.ToString("dd/MM/yyyy HH:mm")</strong> ?
+                </p>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

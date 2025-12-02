@@ -1,4 +1,4 @@
-﻿using eTickets.Data.Cart;
+﻿/*using eTickets.Data.Cart;
 
 namespace eTickets.Data.ViewModels
 {
@@ -8,3 +8,4 @@ namespace eTickets.Data.ViewModels
         public double ShoppingCartTotal { get; set; }
     }
 }
+*/

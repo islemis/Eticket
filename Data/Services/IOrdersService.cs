@@ -1,4 +1,6 @@
-﻿namespace Ticket.Data.Services
+﻿using Ticket.Models;
+
+namespace Ticket.Data.Services
 {
     public interface IOrdersService
     {

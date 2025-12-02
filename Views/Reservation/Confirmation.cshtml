@@ -1,0 +1,22 @@
+﻿@model Ticket.Models.TicketM
+
+@{
+    ViewData["Title"] = "Confirmation de réservation";
+}
+
+<h3>Réservation réussie ! 🎉</h3>
+
+<div class="card">
+    <div class="card-body">
+        <p><b>Film :</b> @Model.Screening.Movie?.Title</p>
+        <p><b>Date et heure :</b> @Model.Screening.StartTime.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><b>Numéro de siège :</b> @Model.SeatNumber</p>
+        <p><b>Prix :</b> @Model.Screening.Price Dt</p>
+        <p><b>Réservé par :</b> @Model.UserId</p>
+        <p><b>Date d'achat :</b> @Model.DateAchat.ToString("dd/MM/yyyy HH:mm")</p>
+    </div>
+</div>
+
+<a asp-controller="Movie" asp-action="Index" class="btn btn-primary mt-3">
+    Retour à la liste des films
+</a>

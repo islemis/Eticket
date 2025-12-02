@@ -1,10 +1,12 @@
 ﻿
-/*using eTickets.Data.Static;
-using eTickets.Data.ViewModels;
-using eTickets.Models;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Ticket.Data;
+using Ticket.Data.Static;
+using Ticket.Data.ViewModels;
+using Ticket.Models;
 namespace Ticket.Controllers
 {
     public class AccountController : Controller
@@ -98,4 +100,3 @@ namespace Ticket.Controllers
 
     }
 }
-*/

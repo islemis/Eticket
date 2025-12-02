@@ -2,7 +2,7 @@
 using Ticket.Data;
 using Ticket.Models;
 
-namespace eTickets.Data.Services
+namespace Ticket.Data.Services
 {
     public class CinemaService
     {

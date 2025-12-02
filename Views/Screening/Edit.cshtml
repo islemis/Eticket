@@ -1,0 +1,47 @@
+﻿@model Ticket.Models.Screening
+
+@{
+    ViewData["Title"] = "Modifier séance";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-3">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h4>Modifier la séance</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="MovieId" class="form-label">Film</label>
+                        <select asp-for="MovieId" class="form-select" asp-items="ViewBag.Movies">
+                            <option value="">-- Sélectionner un film --</option>
+                        </select>
+                        <span asp-validation-for="MovieId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="StartTime" class="form-label">Date et heure</label>
+                        <input asp-for="StartTime" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Price" class="form-label">Prix</label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning">Modifier</button>
+                    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

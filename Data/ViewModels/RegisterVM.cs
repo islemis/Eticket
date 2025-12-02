@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace eTickets.Data.ViewModels
+namespace Ticket.Data.ViewModels
 {
     public class RegisterVM
     {
