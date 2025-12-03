@@ -4,6 +4,14 @@
 @{
     ViewData["Title"] = "Liste des films";
 }
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <div class="text-end mb-3">
+        <a asp-action="Create" class="btn btn-success">
+            + Ajouter un film
+        </a>
+    </div>
+}
 
 <div class="row">
     @foreach (var item in Model)

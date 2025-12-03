@@ -12,7 +12,6 @@ namespace Ticket.Data
         }
 
 
-        public DbSet<Cinema> Cinemas { get; set; }
 
         public DbSet<Actor> Actors { get; set; }
         public DbSet<Producer> Producers { get; set; }
@@ -22,9 +21,6 @@ namespace Ticket.Data
 
         public DbSet<Actor_Movie> Actors_Movies { get; set; }
 
-        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
 
 
 

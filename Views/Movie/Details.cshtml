@@ -5,72 +5,71 @@
     ViewData["Title"] = "Détails du film";
 }
 
-<div class="row">
-    <div class="col-md-8 offset-2">
-        <div class="card mb-4">
-            <div class="card-header bg-info text-white">
-                <h4>@Model.Title</h4>
-            </div>
-
+<div class="row justify-content-center my-4">
+    <div class="col-lg-10">
+        <div class="card shadow-lg">
             <div class="row g-0">
+                <!-- Image du film -->
                 <div class="col-md-4">
-                    <img src="@Model.ImageURL" class="img-fluid" alt="@Model.Title" />
+                    <img src="@Model.ImageURL" class="img-fluid rounded-start" alt="@Model.Title" />
                 </div>
 
+                <!-- Infos du film -->
                 <div class="col-md-8">
                     <div class="card-body">
-                        <p><b>Description :</b> @Model.Description</p>
-
-                        <p><b>Durée :</b> @Model.DurationMinutes minutes</p>
-
-                        <p>
+                        <h2 class="card-title text-primary">@Model.Title</h2>
+                        <p class="text-muted mb-2"><b>Durée :</b> @Model.DurationMinutes minutes</p>
+                        <p class="mb-2">
                             <b>Producteur :</b>
-                            <a asp-controller="Producers" asp-action="Details" asp-route-id="@Model.ProducerId">
+                            <p  >
                                 @Model.Producer.Name
-                            </a>
+                            </p>
                         </p>
 
-                        <p>
+                        <p class="mb-3"><b>Période :</b> @Model.StartDate.ToString("dd/MM/yyyy") – @Model.EndDate.ToString("dd/MM/yyyy")</p>
+
+                        <!-- Description -->
+                        <p class="card-text"><b>Description :</b> @Model.Description</p>
+
+                        <!-- Acteurs -->
+                        <div class="mb-3">
                             <b>Acteurs :</b>
-                            <hr />
-                            <div class="row">
+                            <div class="d-flex flex-wrap mt-2">
                                 @foreach (var actorMovie in Model.Actors_Movies)
                                 {
-                                    <div class="col-md-4 text-center mb-3">
-                                        <br />
-                                        <a asp-controller="Actors" asp-action="Details" asp-route-id="@actorMovie.ActorId">
-                                            @actorMovie.Actor.Name
-                                        </a>
-                                    </div>
+                                    <p 
+                                       class="badge bg-info text-white me-2 mb-2 text-decoration-none">
+                                        @actorMovie.Actor.Name
+                                    </p>
                                 }
                             </div>
-                        </p>
+                        </div>
 
-                        <p>
+                        <!-- Séances -->
+                        <div>
                             <b>Séances disponibles :</b>
-                            <ul>
+                            <div class="list-group mt-2">
                                 @foreach (var screening in Model.Screenings)
                                 {
-                                    <li>
-                                        @screening.StartTime.ToString("dd/MM/yyyy HH:mm")
-                                        – Prix: @screening.Price Dt
-
-                                        <a class="btn btn-sm btn-primary ms-2"
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>
+                                            @screening.StartTime.ToString("dd/MM/yyyy HH:mm")
+                                            – <strong>@screening.Price Dt</strong>
+                                        </span>
+                                        <a class="btn btn-sm btn-primary"
                                            asp-controller="Screening"
                                            asp-action="Details"
                                            asp-route-id="@screening.Id">
                                             Voir
                                         </a>
-                                    </li>
+                                    </div>
                                 }
-                            </ul>
-                        </p>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
             </div>
-
-         
         </div>
     </div>
 </div>

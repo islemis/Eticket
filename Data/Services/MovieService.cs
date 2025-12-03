@@ -36,45 +36,44 @@ namespace Ticket.Data.Services
         public async Task Add(Movie movie, int[] actorIds)
         {
             await _context.Movies.AddAsync(movie);
-            await _context.SaveChangesAsync(); // pour récupérer l'Id du film
+            await _context.SaveChangesAsync(); // récupère Id du film
 
-            // Ajouter les relations Many-to-Many
-            foreach (var actorId in actorIds)
+            if (actorIds != null)
             {
-                _context.Actors_Movies.Add(new Actor_Movie
+                foreach (var actorId in actorIds)
                 {
-                    MovieId = movie.Id,
-                    ActorId = actorId
-                });
+                    _context.Actors_Movies.Add(new Actor_Movie
+                    {
+                        MovieId = movie.Id,
+                        ActorId = actorId
+                    });
+                }
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
         }
-
 
         public async Task Update(Movie movie, int[] actorIds)
         {
-            // Mettre à jour les infos du film
             _context.Movies.Update(movie);
             await _context.SaveChangesAsync();
 
-            // Supprimer les anciennes relations avec les acteurs
             var existingActors = _context.Actors_Movies.Where(am => am.MovieId == movie.Id);
             _context.Actors_Movies.RemoveRange(existingActors);
             await _context.SaveChangesAsync();
 
-            // Ajouter les nouvelles relations
-            foreach (var actorId in actorIds)
+            if (actorIds != null)
             {
-                _context.Actors_Movies.Add(new Actor_Movie
+                foreach (var actorId in actorIds)
                 {
-                    MovieId = movie.Id,
-                    ActorId = actorId
-                });
+                    _context.Actors_Movies.Add(new Actor_Movie
+                    {
+                        MovieId = movie.Id,
+                        ActorId = actorId
+                    });
+                }
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
         }
-
         public async Task Delete(int id)
         {
             var movie = await _context.Movies.FindAsync(id);

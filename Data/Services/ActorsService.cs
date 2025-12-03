@@ -17,5 +17,10 @@ namespace Ticket.Data.Services
         {
             return await _context.Actors.ToListAsync();
         }
+        public async Task Add(Actor actor)
+        {
+            _context.Actors.Add(actor);
+            await _context.SaveChangesAsync();
+        }
     }
 }

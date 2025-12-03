@@ -9,17 +9,14 @@ namespace Ticket.Controllers
     {
         private readonly IMovieService _movieService;
         private readonly ProducerService _producerService;
-        private readonly CinemaService _cinemaService;
         private readonly ActorService _actorService;
 
         public MovieController(IMovieService movieService,
                                ProducerService producerService,
-                               CinemaService cinemaService,
                                ActorService actorService)
         {
             _movieService = movieService;
             _producerService = producerService;
-            _cinemaService = cinemaService;
             _actorService = actorService;
         }
 
@@ -30,31 +27,77 @@ namespace Ticket.Controllers
             return View(movies);
         }
 
-        // GET: Movie/Create
+
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Producers = new SelectList(await _producerService.GetAll(), "Id", "Name");
-            ViewBag.Cinemas = new SelectList(await _cinemaService.GetAll(), "Id", "Name");
-            ViewBag.Actors = new MultiSelectList(await _actorService.GetAll(), "Id", "Name");
+            // Toujours initialiser même si vide
+            var actors = await _actorService.GetAll() ?? new List<Actor>();
+            ViewBag.Actors = new MultiSelectList(actors, "Id", "FullName");
+
+            var producers = await _producerService.GetAll() ?? new List<Producer>();
+            ViewBag.Producers = new SelectList(producers, "Id", "FullName");
+
             return View();
         }
 
-        // POST: Movie/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Movie movie, int[] SelectedActorIds)
+        public async Task<IActionResult> Create(Movie movie)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Producers = new SelectList(await _producerService.GetAll(), "Id", "Name");
-                ViewBag.Cinemas = new SelectList(await _cinemaService.GetAll(), "Id", "Name");
-                ViewBag.Actors = new MultiSelectList(await _actorService.GetAll(), "Id", "Name");
+                var actors = await _actorService.GetAll() ?? new List<Actor>();
+                ViewBag.Actors = new MultiSelectList(actors, "Id", "FullName");
+
+                var producers = await _producerService.GetAll() ?? new List<Producer>();
+                ViewBag.Producers = new SelectList(producers, "Id", "FullName");
+
                 return View(movie);
             }
 
-            await _movieService.Add(movie, SelectedActorIds);
+            // 1️⃣ Gestion du producteur
+            if (!string.IsNullOrWhiteSpace(movie.NewProducerName))
+            {
+                var newProducer = new Producer { Name = movie.NewProducerName };
+                await _producerService.Add(newProducer);
+                movie.ProducerId = newProducer.Id;
+            }
+
+            // 2️⃣ Acteurs existants
+            var actorIds = movie.ActorIds ?? new List<int>();
+
+            // 3️⃣ Nouveaux acteurs
+            if (!string.IsNullOrWhiteSpace(movie.NewActorsNames))
+            {
+                var newActorNames = movie.NewActorsNames
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                foreach (var name in newActorNames)
+                {
+                    var newActor = new Actor { Name = name };
+                    await _actorService.Add(newActor);
+                    actorIds.Add(newActor.Id);
+                }
+            }
+
+            // 4️⃣ Upload image
+            if (movie.ImageFile != null && movie.ImageFile.Length > 0)
+            {
+                var fileName = Guid.NewGuid() + Path.GetExtension(movie.ImageFile.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/movies", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await movie.ImageFile.CopyToAsync(stream);
+                }
+                movie.ImageURL = "/images/movies/" + fileName;
+            }
+
+            // 5️⃣ Ajouter le film avec les acteurs
+            await _movieService.Add(movie, actorIds.ToArray());
+
             return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Movie/Edit/5
         public async Task<IActionResult> Edit(int id)
@@ -63,7 +106,6 @@ namespace Ticket.Controllers
             if (movie == null) return NotFound();
 
             ViewBag.Producers = new SelectList(await _producerService.GetAll(), "Id", "Name", movie.ProducerId);
-            ViewBag.Cinemas = new SelectList(await _cinemaService.GetAll(), "Id", "Name", movie.Id);
             ViewBag.Actors = new MultiSelectList(await _actorService.GetAll(),
                                                  "Id", "Name",
                                                  movie.Actors_Movies?.Select(am => am.ActorId));
@@ -79,7 +121,6 @@ namespace Ticket.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.Producers = new SelectList(await _producerService.GetAll(), "Id", "Name", movie.ProducerId);
-                ViewBag.Cinemas = new SelectList(await _cinemaService.GetAll(), "Id", "Name", movie.Id);
                 ViewBag.Actors = new MultiSelectList(await _actorService.GetAll(), "Id", "Name", SelectedActorIds);
                 return View(movie);
             }

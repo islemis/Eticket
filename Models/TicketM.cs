@@ -23,10 +23,10 @@ namespace Ticket.Models
         [ForeignKey("ScreeningId")]
         public Screening Screening { get; set; }
 
-        // 🔗 Relation avec l'utilisateur
-        [Required]
-        [Display(Name = "Utilisateur")]
+        [ForeignKey("UserId")]
         public string UserId { get; set; }
+        public ApplicationUser User { get; set; } 
+
 
         // 🔗 Date d'achat du ticket
         [Required]

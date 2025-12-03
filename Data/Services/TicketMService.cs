@@ -17,6 +17,8 @@ namespace Ticket.Data.Services
             return await _context.TicketMs
                                  .Include(t => t.Screening)
                                      .ThenInclude(s => s.Movie)
+                                         .Include(t => t.User) 
+
                                  .ToListAsync();
         }
 
@@ -65,6 +67,17 @@ namespace Ticket.Data.Services
                 return await _context.TicketMs
                                      .FirstOrDefaultAsync(t => t.ScreeningId == ScreeningId && t.SeatNumber == SeatNumber);
             }
+        public async Task<List<TicketM>> GetTicketsByUser(string userId)
+        {
+            return await _context.TicketMs
+                .Where(t => t.UserId == userId)
+                .Include(t => t.Screening)
+                .ThenInclude(s => s.Movie)
+                .ToListAsync();
         
+
     }
+
+
+}
 }

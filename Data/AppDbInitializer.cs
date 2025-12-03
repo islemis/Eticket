@@ -18,62 +18,62 @@ namespace Ticket.Data
                 if (!context.Producers.Any())
                 {
                     var producers = new List<Producer>
-                {
-                    new Producer { Name = "Christopher Nolan" },
-                    new Producer { Name = "Steven Spielberg" }
-                };
+            {
+                new Producer { Name = "Christopher Nolan" },
+                new Producer { Name = "Steven Spielberg" }
+            };
                     context.Producers.AddRange(producers);
                     context.SaveChanges();
                 }
 
-                // 2️⃣ Actors
+          
+                // 3️⃣ Actors
                 if (!context.Actors.Any())
                 {
                     var actors = new List<Actor>
-                {
-                    new Actor { Name = "Leonardo DiCaprio" },
-                    new Actor { Name = "Joseph Gordon-Levitt" },
-                    new Actor { Name = "Matthew McConaughey" }
-                };
+            {
+                new Actor { Name = "Leonardo DiCaprio" },
+                new Actor { Name = "Joseph Gordon-Levitt" },
+                new Actor { Name = "Matthew McConaughey" }
+            };
                     context.Actors.AddRange(actors);
                     context.SaveChanges();
                 }
 
-                // 3️⃣ Movies
+                // 4️⃣ Movies
                 if (!context.Movies.Any())
                 {
+                    var firstProducerId = context.Producers.First().Id;
+
                     var movies = new List<Movie>
+            {
+                new Movie
                 {
-                    new Movie
-                    {
-                        Title = "Inception",
-                        Description = "Un film de science-fiction sur les rêves partagés.",
-                        DurationMinutes = 148,
-                        ImageURL = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.primevideo.com%2F-%2Ffr%2Fdetail%2FInception%2F0FFJSDLK6HUWC5T8XJUQODMFJ3&psig=AOvVaw139qoOXNAL-RA19otFEvCH&ust=1764786468356000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIij34bEn5EDFQAAAAAdAAAAABAE",
-                        ProducerId = context.Producers.First().Id
-                    },
-                    new Movie
-                    {
-                        Title = "Interstellar",
-                        Description = "Voyage dans l'espace pour sauver l'humanité.",
-                        DurationMinutes = 169,
-                        ImageURL = "https://example.com/interstellar.jpg",
-                        ProducerId = context.Producers.First().Id
-                    },
-                       new Movie
-                    {
-                        Title = "Inception",
-                        Description = "Un film de science-fiction sur les rêves partagés.",
-                        DurationMinutes = 148,
-                        ImageURL = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.primevideo.com%2F-%2Ffr%2Fdetail%2FInception%2F0FFJSDLK6HUWC5T8XJUQODMFJ3&psig=AOvVaw139qoOXNAL-RA19otFEvCH&ust=1764786468356000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIij34bEn5EDFQAAAAAdAAAAABAE",
-                        ProducerId = context.Producers.First().Id
-                    },
-                };
+                    Title = "Inception",
+                    Description = "Un film de science-fiction sur les rêves partagés.",
+                    DurationMinutes = 148,
+                    ImageURL = "https://example.com/inception.jpg",
+                    ProducerId = firstProducerId,
+                    StartDate = DateTime.Today,
+                    EndDate = DateTime.Today.AddMonths(1)
+                },
+                new Movie
+                {
+                    Title = "Interstellar",
+                    Description = "Voyage dans l'espace pour sauver l'humanité.",
+                    DurationMinutes = 169,
+                    ImageURL = "https://example.com/interstellar.jpg",
+                    ProducerId = firstProducerId,
+                    StartDate = DateTime.Today,
+                    EndDate = DateTime.Today.AddMonths(1)
+                }
+            };
+
                     context.Movies.AddRange(movies);
                     context.SaveChanges();
                 }
 
-                // 4️⃣ Relations Actor_Movie
+                // 5️⃣ Relations Actor_Movie
                 if (!context.Actors_Movies.Any())
                 {
                     var inception = context.Movies.First(m => m.Title == "Inception");
@@ -84,30 +84,33 @@ namespace Ticket.Data
                     var matthew = context.Actors.First(a => a.Name == "Matthew McConaughey");
 
                     context.Actors_Movies.AddRange(new List<Actor_Movie>
-                {
-                    new Actor_Movie { MovieId = inception.Id, ActorId = leo.Id },
-                    new Actor_Movie { MovieId = inception.Id, ActorId = joseph.Id },
-                    new Actor_Movie { MovieId = interstellar.Id, ActorId = matthew.Id }
-                });
+            {
+                new Actor_Movie { MovieId = inception.Id, ActorId = leo.Id },
+                new Actor_Movie { MovieId = inception.Id, ActorId = joseph.Id },
+                new Actor_Movie { MovieId = interstellar.Id, ActorId = matthew.Id }
+            });
+
                     context.SaveChanges();
                 }
 
-                // 5️⃣ Screenings
+                // 6️⃣ Screenings
                 if (!context.Screenings.Any())
                 {
                     var inceptionId = context.Movies.First(m => m.Title == "Inception").Id;
                     var interstellarId = context.Movies.First(m => m.Title == "Interstellar").Id;
 
                     var screenings = new List<Screening>
-                {
-                    new Screening { MovieId = inceptionId, StartTime = DateTime.Now.AddHours(2), Price = 10 },
-                    new Screening { MovieId = inceptionId, StartTime = DateTime.Now.AddHours(5), Price = 12 },
-                    new Screening { MovieId = interstellarId, StartTime = DateTime.Now.AddHours(3), Price = 15 }
-                };
+            {
+                new Screening { MovieId = inceptionId, StartTime = DateTime.Now.AddHours(2), Price = 10 },
+                new Screening { MovieId = inceptionId, StartTime = DateTime.Now.AddHours(5), Price = 12 },
+                new Screening { MovieId = interstellarId, StartTime = DateTime.Now.AddHours(3), Price = 15 }
+            };
+
                     context.Screenings.AddRange(screenings);
                     context.SaveChanges();
                 }
-            
+            }
+
             /*
                             //Cinema
                             if (!context.Cinemas.Any())
@@ -409,7 +412,7 @@ namespace Ticket.Data
                             */
         }
 
-        }
+        
 
         public static async Task SeedUsersAndRolesAsync(IApplicationBuilder applicationBuilder)
         {

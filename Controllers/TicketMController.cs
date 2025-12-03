@@ -18,67 +18,63 @@ namespace eTickets.Controllers
 
         // GET: Ticket
         public async Task<IActionResult> Index()
-        {
+           {
             var tickets = await _ticketService.GetAll();
             return View(tickets);
         }
-
-        // GET: Ticket/Create
-        public async Task<IActionResult> Create()
+        // GET: Ticket/MyTickets
+        public async Task<IActionResult> MyTickets()
         {
-            var screenings = await _screeningService.GetAll();
-            ViewBag.Screenings = new SelectList(screenings, "Id", "StartTime");
-            return View();
+            // Récupérer l'ID de l'utilisateur connecté
+            var userId = User.Identity.Name; // ou User.FindFirst(ClaimTypes.NameIdentifier).Value selon ton Auth
+            var tickets = await _ticketService.GetTicketsByUser(userId);
+            return View(tickets);
         }
 
-        // POST: Ticket/Create
+        public async Task<IActionResult> Create(int screeningId)
+        {
+            var screening = await _screeningService.GetById(screeningId);
+            if (screening == null) return NotFound();
+
+            return View(screening); // On passe la séance à la vue
+        }
+
+        // POST: Reservation/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TicketM ticket)
+        public async Task<IActionResult> Create(int screeningId, int seatNumber)
         {
-            if (!ModelState.IsValid)
-            {
-                var screenings = await _screeningService.GetAll();
-                ViewBag.Screenings = new SelectList(screenings, "Id", "StartTime");
-                return View(ticket);
-            }
+            var screening = await _screeningService.GetById(screeningId);
+            if (screening == null) return NotFound();
 
-            // Vérifier si le siège est déjà réservé
-            var existingTicket = await _ticketService.GetTicketBySeat(ticket.ScreeningId, ticket.SeatNumber);
+            // Vérifier si le siège est déjà pris
+            var existingTicket = await _ticketService.GetTicketBySeat(screeningId, seatNumber);
             if (existingTicket != null)
             {
                 ModelState.AddModelError("", "Ce siège est déjà réservé !");
-                var screenings = await _screeningService.GetAll();
-                ViewBag.Screenings = new SelectList(screenings, "Id", "StartTime");
-                return View(ticket);
+                return View(screening);
             }
 
+            // Créer le ticket
+            var ticket = new TicketM
+            {
+                ScreeningId = screeningId,
+                SeatNumber = seatNumber,
+                UserId = User.Identity.Name, // ou ton UserId
+                DateAchat = DateTime.Now
+            };
+
             await _ticketService.Add(ticket);
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Confirmation", new { id = ticket.Id });
         }
 
-        // GET: Ticket/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        // GET: Reservation/Confirmation/5
+        public async Task<IActionResult> Confirmation(int id)
         {
             var ticket = await _ticketService.GetById(id);
             if (ticket == null) return NotFound();
-            return View(ticket);
-        }
 
-        // POST: Ticket/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            await _ticketService.Delete(id);
-            return RedirectToAction(nameof(Index));
-        }
-
-        // GET: Ticket/Details/5
-        public async Task<IActionResult> Details(int id)
-        {
-            var ticket = await _ticketService.GetById(id);
-            if (ticket == null) return NotFound();
             return View(ticket);
         }
     }

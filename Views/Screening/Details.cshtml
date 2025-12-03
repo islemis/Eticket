@@ -31,9 +31,8 @@
                                     @foreach (var actorMovie in Model.Movie.Actors_Movies)
                                     {
                                         <div class="col-md-4 text-center mb-3">
-                                            <a asp-controller="Actors" asp-action="Details" asp-route-id="@actorMovie.ActorId">
                                                 @actorMovie.Actor.Name
-                                            </a>
+                                          
                                         </div>
                                     }
                                 }
@@ -47,20 +46,19 @@
                 </div>
             </div>
 
-            <div class="card-footer">
-                <a asp-action="Index" class="btn btn-outline-primary">Retour à la liste</a>
-            </div>
+        
             <div class="card-footer d-flex justify-content-between">
                 <a asp-action="Index" class="btn btn-outline-primary">Retour à la liste</a>
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <a asp-controller="Reservation" asp-action="Create" asp-route-screeningId="@Model.Id" class="btn btn-success">
+                    <a asp-controller="TicketM" asp-action="Create" asp-route-screeningId="@Model.Id" class="btn btn-success">
                         Réserver ce ticket
                     </a>
                 }
                 else
                 {
+
                     <span class="text-danger">Connectez-vous pour réserver</span>
                 }
             </div>
