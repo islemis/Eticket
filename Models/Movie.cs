@@ -44,6 +44,7 @@ namespace Ticket.Models
         [Display(Name = "Affiche du film")]
         public IFormFile ImageFile { get; set; }
 
+        [NotMapped]
 
         [Display(Name = "Sélectionner les acteurs")]
         public List<int> ActorIds { get; set; }

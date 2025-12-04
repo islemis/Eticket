@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Liste des films";
 }
+
 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 {
     <div class="text-end mb-3">
@@ -13,48 +14,53 @@
     </div>
 }
 
+@if (!User.IsInRole("Admin"))
+{
+    <div class="text-center mt-5 mb-4">
+        <h1>Bienvenue sur MyCinemaApp</h1>
+        <p>Réservez vos tickets de cinéma en ligne facilement !</p>
+    </div>
+}
+
 <div class="row">
     @foreach (var item in Model)
     {
-        <div class="col-md-4 col-xs-6 mb-3">
-            <div class="card shadow">
-                <img src="@item.ImageURL" class="card-img-top" style="height: 300px; object-fit: cover;" />
+        <div class="col-md-4 col-xs-6 mb-4">
+            <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none text-dark">
+                <div class="card shadow h-100 hover-card">
+                    <img src="@item.ImageURL" class="card-img-top" style="height: 300px; object-fit: cover;" />
 
-                <div class="card-body">
-                    <h5 class="card-title">@item.Title</h5>
-                    <p class="card-text">@item.Description</p>
-                    <p><b>Durée :</b> @item.DurationMinutes minutes</p>
-                    <p><b>Producteur :</b> @item.Producer?.Name</p>
-
-                    <p>
-                        <b>Acteurs :</b>
-                        @if (item.Actors_Movies != null && item.Actors_Movies.Any())
-                        {
-                            @string.Join(", ",
-                            item.Actors_Movies.Select(a => a.Actor.Name)
-                                        )
-                                        }
-                        else
-                        {
-                            <span>Pas d'acteurs</span>
-                        }
-                    </p>
-                </div>
-
-                <div class="card-footer text-end">
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">
-                        Détails
-                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                       
+                    </div>
 
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">
-                            Modifier
-                        </a>
+                        <div class="card-footer text-end">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                Modifier
+                            </a>
+                        </div>
                     }
                 </div>
-            </div>
+            </a>
         </div>
     }
 </div>
 
+<style>
+    .hover-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+    .card a {
+        color: inherit;
+        text-decoration: none;
+    }
+</style>

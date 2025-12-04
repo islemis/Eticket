@@ -77,7 +77,15 @@ namespace Ticket.Data.Services
         
 
     }
+        public async Task<List<int>> GetReservedSeats(int screeningId)
+        {
+            return await _context.TicketMs
+                .Where(t => t.ScreeningId == screeningId)
+                .Select(t => t.SeatNumber)
+                .ToListAsync();
+        }
 
 
-}
+
+    }
 }

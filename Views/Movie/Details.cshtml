@@ -56,12 +56,18 @@
                                             @screening.StartTime.ToString("dd/MM/yyyy HH:mm")
                                             – <strong>@screening.Price Dt</strong>
                                         </span>
-                                        <a class="btn btn-sm btn-primary"
-                                           asp-controller="Screening"
-                                           asp-action="Details"
-                                           asp-route-id="@screening.Id">
-                                            Voir
-                                        </a>
+                                      
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <a asp-controller="TicketM" asp-action="Create" asp-route-screeningId="@Model.Id" class="btn btn-success">
+                                                Réserver ce ticket
+                                            </a>
+                                        }
+                                        else
+                                        {
+
+                                            <span class="text-danger">Connectez-vous pour réserver</span>
+                                        }
                                     </div>
                                 }
                             </div>

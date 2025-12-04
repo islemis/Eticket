@@ -15,7 +15,7 @@ namespace Ticket.Data.Services
         Task Delete(int id);
         Task<TicketM> GetTicketBySeat(int ScreeningId, int SeatNumber);
         Task<List<TicketM>> GetTicketsByUser(string userId);
-
+        Task<List<int>> GetReservedSeats(int screeningId);
 
     }
 }

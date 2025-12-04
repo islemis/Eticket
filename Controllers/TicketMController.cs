@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Ticket.Data.Services;
 using Ticket.Models;
@@ -9,11 +10,14 @@ namespace eTickets.Controllers
     {
         private readonly ITicketMService _ticketService;
         private readonly IScreeningService _screeningService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TicketMController(ITicketMService ticketService, IScreeningService screeningService)
+
+        public TicketMController(ITicketMService ticketService, IScreeningService screeningService, UserManager<ApplicationUser> userManager)
         {
             _ticketService = ticketService;
             _screeningService = screeningService;
+            _userManager = userManager;
         }
 
         // GET: Ticket
@@ -26,7 +30,7 @@ namespace eTickets.Controllers
         public async Task<IActionResult> MyTickets()
         {
             // Récupérer l'ID de l'utilisateur connecté
-            var userId = User.Identity.Name; // ou User.FindFirst(ClaimTypes.NameIdentifier).Value selon ton Auth
+            var userId = _userManager.GetUserId(User);
             var tickets = await _ticketService.GetTicketsByUser(userId);
             return View(tickets);
         }
@@ -35,6 +39,8 @@ namespace eTickets.Controllers
         {
             var screening = await _screeningService.GetById(screeningId);
             if (screening == null) return NotFound();
+            ViewBag.ReservedSeats = await _ticketService.GetReservedSeats(screeningId);
+
 
             return View(screening); // On passe la séance à la vue
         }
@@ -54,13 +60,19 @@ namespace eTickets.Controllers
                 ModelState.AddModelError("", "Ce siège est déjà réservé !");
                 return View(screening);
             }
+            var userId = _userManager.GetUserId(User);
+
+            if (userId == null)
+            {
+                throw new Exception("PROBLEME : UserId est NULL !");
+            }
 
             // Créer le ticket
             var ticket = new TicketM
             {
                 ScreeningId = screeningId,
                 SeatNumber = seatNumber,
-                UserId = User.Identity.Name, // ou ton UserId
+                UserId = userId, // ou ton UserId
                 DateAchat = DateTime.Now
             };
 

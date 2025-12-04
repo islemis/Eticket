@@ -2,26 +2,78 @@
 
 @{
     ViewData["Title"] = "Réserver une place";
+    var reservedSeats = ViewBag.ReservedSeats as List<int> ?? new List<int>();
+    int seatsPerRow = 10;   // 👉 10 sièges par ligne (10 x 5 = 50)
 }
 
 <h3>Réserver une place pour : @Model.Movie?.Title</h3>
 <p><b>Date et heure :</b> @Model.StartTime.ToString("dd/MM/yyyy HH:mm")</p>
 <p><b>Prix :</b> @Model.Price Dt</p>
 
-<form asp-action="Create" method="post">
-    <input type="hidden" name="screeningId" value="@Model.Id" />
+<h4>Choisissez votre siège :</h4>
 
-    <div class="mb-3">
-        <label for="seatNumber" class="form-label">Numéro de siège :</label>
-        <input type="number" class="form-control" id="seatNumber" name="seatNumber" min="1" max="50" required />
-        
-    </div>
+<div class="d-flex flex-wrap" style="max-width: 650px;">
+    @for (int i = 1; i <= 50; i++)
+    {
+        bool taken = reservedSeats.Contains(i);
 
-    <button type="submit" class="btn btn-success">Confirmer la réservation</button>
-</form>
+        <form asp-action="Create" method="post" class="m-1">
+            <input type="hidden" name="screeningId" value="@Model.Id" />
+            <input type="hidden" name="seatNumber" value="@i" />
 
-<div class="mt-3">
-    <a asp-controller="Screening" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-primary">
-        Retour à la séance
-    </a>
+            <button type="submit"
+                    class="btn @(taken ? "btn-secondary" : "btn-primary")"
+                    style="width:45px; height:45px; font-size:14px; padding:0;"
+                    onclick="return confirm('Voulez-vous vraiment réserver ce siège ?');"
+                    @(taken ? "disabled" : "")>
+                @i
+            </button>
+
+        </form>
+
+        @* Retour à la ligne après 10 sièges *@
+        if (i % seatsPerRow == 0)
+        {
+            <div class="w-100"></div>
+        }
+    }
+
 </div>
+<div class="legend">
+    <span><div class="box taken"></div> Réservé</span>
+    <span><div class="box available"></div> Disponible</span>
+</div>
+
+<style>
+    
+
+    .legend {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+        }
+
+        .legend .box {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        .legend .available {
+            background-color: #0d6efd;
+            
+        }
+
+        .legend .taken {
+            background-color: #6c757d;
+        }
+
+        
+</style>

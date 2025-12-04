@@ -79,7 +79,7 @@ app.UseAuthorization();
 // Endpoint routing
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Movie}/{action=Index}/{id?}");
 
 // Seed database
 AppDbInitializer.Seed(app);

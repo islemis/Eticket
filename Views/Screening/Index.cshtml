@@ -18,11 +18,9 @@
                         <b>Date et heure :</b> @item.StartTime.ToString("dd/MM/yyyy HH:mm")
                     </p>
                     <p><b>Prix :</b> @item.Price Dt</p>
-                    <p><b>Producteur :</b> @item.Movie?.Producer?.Name</p>
                 </div>
 
                 <div class="card-footer text-end">
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Détails</a>
 
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
